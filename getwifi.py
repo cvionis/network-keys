@@ -9,14 +9,13 @@ os.system(f"netsh wlan show profile > {cwd}/profile_info/ssid_profiles.txt")
 with open(f"{cwd}/profile_info/ssid_profiles.txt", "r") as f:
     file_split = list((f.read()).split("\n"))
 
-profiles = [(i.split(':'))[1] for i in file_split if 'All User Profile' in i]
-
+profiles = ([(i.split(':'))[1].replace(" ", "") for i in file_split if 'All User Profile' in i])
 p_dict = {}
 
 c = 1
 
 for i in range(len(profiles)):
-    p_dict.update({c: profiles[i]})
+    p_dict.update({c:profiles[i]})
     c+=1
     i+=1
 
@@ -34,11 +33,9 @@ while True:
 
 
 os.system(f"netsh wlan export profile name={p_dict.get(profile_input)} folder={cwd}\profile_info key=clear")
-# Save project path to variable; Run 'netsh wlan show profile' and direct output to new file in project path; 
-# get the list of ssid's from the file,
-# print them out and let the user choose which one's password should be displayed.
 
-# Once user chooses from the list of ssid's, run 'netsh wlan export profile key=clear'. 
-# Open the xml file that the info was saved to using 'with open()'; 
-# get the key (pw) inside <keyMaterial> and print it
+pw_file_name = (f"Wi-Fi-{p_dict.get(profile_input)}")
 
+with open(f"{cwd}\\profile_info\\{pw_file_name}", "r") as f:
+    wifi_pw = [i for i in list(f.read()).split('\n') if "keyMaterial" in i]
+print(wifi_pw)
