@@ -30,7 +30,7 @@ while True:
     if (profile_input in p_dict):
         break
     else:
-        print("Try again")
+        print("Invalid choice -- try again")
 
 profile_value = p_dict.get(profile_input)
 
