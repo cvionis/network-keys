@@ -36,6 +36,6 @@ os.system(f"netsh wlan export profile name={p_dict.get(profile_input)} folder={c
 
 pw_file_name = (f"Wi-Fi-{p_dict.get(profile_input)}")
 
-with open(f"{cwd}\\profile_info\\{pw_file_name}", "r") as f:
-    wifi_pw = [i for i in list(f.read()).split('\n') if "keyMaterial" in i]
+with open(f"{cwd}\\profile_info\\{pw_file_name}.xml", "r") as f:
+    wifi_pw = [i for i in list(f.read().split("\n")) if "keyMaterial" in i]
 print(wifi_pw)
