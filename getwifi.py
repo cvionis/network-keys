@@ -42,6 +42,6 @@ with open(f"{cwd}\\profile_info\\{pw_file_name}.xml", "r") as f:
 
 wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
  
-print(f"{profile_value}'s password: {wifi_pw}")
+print(f"{profile_value}'s password:\n>>> {wifi_pw} <<<")
 
 os.system(f"rm {cwd}/profile_info/*")
