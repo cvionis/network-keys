@@ -1,6 +1,7 @@
 import os
 import re
 
+os.system("clear")
 cwd = os.getcwd()
 
 # Direct output of command to text file inside project directory
