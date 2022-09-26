@@ -6,7 +6,6 @@ cwd = os.getcwd()
 # Direct output of command to text file inside project directory
 os.system(f"netsh wlan show profile > {cwd}/profile_info/ssid_profiles.txt")
 
-# Note: Save path as variable at some point in order to simply substitution
 with open(f"{cwd}/profile_info/ssid_profiles.txt", "r") as f:
     file_split = list((f.read()).split("\n"))
 
@@ -23,7 +22,6 @@ for i in range(len(profiles)):
 print("\nChoose a network:\n")
 [print(f"{e} {p_dict.get(e)}") for e in (p_dict)]
 
-# Note: Add counter that exits program after enough failed tries are occur
 while True:
     profile_input = int(input())
     
