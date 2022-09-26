@@ -20,7 +20,7 @@ for i in range(len(profiles)):
     i+=1
 
 print("\nChoose a network:\n")
-[print(f"{e} {p_dict.get(e)}") for e in (p_dict)]
+[print(f"{e}) {p_dict.get(e)}") for e in (p_dict)]
 
 while True:
     profile_input = int(input("\n> "))
