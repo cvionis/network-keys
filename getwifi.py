@@ -3,9 +3,10 @@ import os
 cwd = os.getcwd()
 
 # Direct output of command to text file inside project directory
-os.system(f"netsh wlan show profile > {cwd}/ssid_profiles.txt")
+os.system(f"netsh wlan show profile > {cwd}/profile_info/ssid_profiles.txt")
 
-with open(f"{cwd}/ssid_profiles.txt", "r") as f:
+# Note: Save path as variable at some point in order to simply substitution
+with open(f"{cwd}/profile_info/ssid_profiles.txt", "r") as f:
     file_split = list((f.read()).split("\n"))
 
 profiles = [(i.split(':'))[1] for i in file_split if 'All User Profile' in i]
