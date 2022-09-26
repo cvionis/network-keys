@@ -10,6 +10,17 @@ with open(f"{cwd}/ssid_profiles.txt", "r") as f:
 
 profiles = [(i.split(':'))[1] for i in file_split if 'All User Profile' in i]
 
+p_dict = {}
+
+c = 1
+
+for i in range(len(profiles)):
+    p_dict.update({c: profiles[i]})
+    c+=1
+    i+=1
+
+print("\nChoose a network:\n")
+[print(f"{e} {p_dict.get(e)}") for e in (p_dict)] 
 # Save project path to variable; Run 'netsh wlan show profile' and direct output to new file in project path; 
 # get the list of ssid's from the file,
 # print them out and let the user choose which one's password should be displayed.
