@@ -1,4 +1,5 @@
 import os
+import re
 
 cwd = os.getcwd()
 
@@ -37,5 +38,8 @@ os.system(f"netsh wlan export profile name={p_dict.get(profile_input)} folder={c
 pw_file_name = (f"Wi-Fi-{p_dict.get(profile_input)}")
 
 with open(f"{cwd}\\profile_info\\{pw_file_name}.xml", "r") as f:
-    wifi_pw = [i for i in list(f.read().split("\n")) if "keyMaterial" in i]
-print(wifi_pw)
+    wifi_pw_element = "".join([i for i in list(f.read().split("\n")) if "keyMaterial" in i])
+# Can probably do this more efficiently (like searching for 8 numbers and returning the first matching instance)
+wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
+    
+print(f"{p_dict.get(profile_input)}'s password: {wifi_pw}")
