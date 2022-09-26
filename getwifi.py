@@ -48,7 +48,7 @@ with open(f"{cwd}\\profile_info\\{pw_file_name}.xml", "r") as f:
 
 wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
  
-print(f"{profile_value}'s password:\n------------\n| {wifi_pw} |\n------------")
+print(f"\n{profile_value}'s password:\n------------\n| {wifi_pw} |\n------------")
 
 # Delete files inside 'profile_info' directory
 os.system(f"rm {cwd}/profile_info/*")
