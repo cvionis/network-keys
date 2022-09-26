@@ -37,8 +37,8 @@ while True:
 
 profile_value = p_dict.get(profile_input)
 
-# Export file containing profile's password to 'profile_info' directory
-os.system(f"netsh wlan export profile name={profile_value} folder={cwd}\profile_info key=clear")
+# Export file containing profile's password to 'profile_info' directory, hide processing info
+os.system(f"netsh wlan export profile name={profile_value} folder={cwd}\profile_info key=clear | @echo off")
 
 pw_file_name = (f"Wi-Fi-{profile_value}")
 
