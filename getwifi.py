@@ -22,7 +22,7 @@ for i in range(len(profiles)):
 print("\nChoose a network:\n")
 [print(f"{e} {p_dict.get(e)}") for e in (p_dict)]
 
-
+# Note: Add counter that exits program after enough failed tries are occur
 while True:
     profile_input = int(input())
     
@@ -30,6 +30,8 @@ while True:
         break
     else:
         print("Try again")
+
+os.system(f"netsh wlan export profile name={p_dict.get(profile_input)} folder={cwd} key=clear")
 # Save project path to variable; Run 'netsh wlan show profile' and direct output to new file in project path; 
 # get the list of ssid's from the file,
 # print them out and let the user choose which one's password should be displayed.
