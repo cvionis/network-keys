@@ -31,7 +31,8 @@ while True:
     else:
         print("Try again")
 
-os.system(f"netsh wlan export profile name={p_dict.get(profile_input)} folder={cwd} key=clear")
+
+os.system(f"netsh wlan export profile name={p_dict.get(profile_input)} folder={cwd}\profile_info key=clear")
 # Save project path to variable; Run 'netsh wlan show profile' and direct output to new file in project path; 
 # get the list of ssid's from the file,
 # print them out and let the user choose which one's password should be displayed.
