@@ -23,8 +23,8 @@ print("\nChoose a network:\n")
 [print(f"{e} {p_dict.get(e)}") for e in (p_dict)]
 
 while True:
-    profile_input = int(input())
-    
+    profile_input = int(input("\n> "))
+ 
     if (profile_input in p_dict):
         break
     else:
