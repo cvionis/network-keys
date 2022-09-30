@@ -11,6 +11,9 @@ os.system(f"netsh wlan show profile > {cwd}/profile_info/ssid_profiles.txt")
 with open(f"{cwd}/profile_info/ssid_profiles.txt", "r") as f:
     file_split = list((f.read()).split("\n"))
 
+# Delete all files inside profile_info 
+os.system(f"rm {cwd}/profile_info/*")
+
 # Get listed user profiles from 'file_split' list and save them to a new list
 profiles = ([(i.split(':'))[1].replace(" ", "") for i in file_split if 'All User Profile' in i])
 
@@ -50,5 +53,5 @@ wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
  
 print(f"\n{profile_value}'s password:\n------------\n| {wifi_pw} |\n------------")
 
-# Delete files inside 'profile_info' directory
+# Delete all files inside 'profile_info' directory
 os.system(f"rm {cwd}/profile_info/*")
