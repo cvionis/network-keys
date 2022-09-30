@@ -25,7 +25,7 @@ for i in range(len(profiles)):
 
 # Print all profiles, use a loop to check selection input and save input to 'profile_input'
 print("\nChoose a network:\n")
-[print(f"{e}) {p_dict.get(e)}") for e in (p_dict)]
+[print(f"{i}) {p_dict.get(i)}") for i in (p_dict)]
 
 while True:
     profile_input = int(input("\n> "))
