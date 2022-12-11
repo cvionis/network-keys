@@ -1,18 +1,19 @@
 import os
 import re
+import subprocess
 
-os.system("clear")
+subprocess.run(["clear"])
 cwd = os.getcwd()
 
 # Direct output of command to text file inside project directory
-os.system(f"netsh wlan show profile > {cwd}/profile_info/ssid_profiles.txt")
+subprocess.run(["netsh", "wlan", "show", "profile", ">", f"{cwd}/profile_info/ssid_profiles.txt"])
 
 # Save each line of file containing profile info to a list
 with open(f"{cwd}/profile_info/ssid_profiles.txt", "r") as f:
     file_split = list((f.read()).split("\n"))
 
 # Delete all files inside profile_info 
-os.system(f"rm {cwd}/profile_info/*")
+subprocess.run(["rm", "-f", f"{cwd}/profile_info/*")
 
 # Get listed user profiles from 'file_split' list and save them to a new list
 profiles = ([(i.split(':'))[1].replace(" ", "") for i in file_split if 'All User Profile' in i])
@@ -41,11 +42,11 @@ while True:
 profile_value = p_dict.get(profile_input)
 
 # Export file containing profile's password to 'profile_info' directory, hide processing info
-os.system(f"netsh wlan export profile name={profile_value} folder={cwd}\profile_info key=clear | @echo off")
+subprocess.run(["netsh", "wlan", "export", "profile", "name={profile_value}", f"folder={cwd}profile_info", "key=clear", "|", "@echo", "off"])
 
 pw_file_name = (f"Wi-Fi-{profile_value}")
 
-# Get <keyMaterial> tag inside exported file, save its contents to 'wifi_pw'
+# Get <keyMaterial> tag inside exported file, save its contents to variable
 with open(f"{cwd}\\profile_info\\{pw_file_name}.xml", "r") as f:
     wifi_pw_element = "".join([i for i in list(f.read().split("\n")) if "keyMaterial" in i])
 
@@ -54,4 +55,4 @@ wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
 print(f"\n{profile_value}'s password:\n------------\n| {wifi_pw} |\n------------")
 
 # Delete all files inside 'profile_info' directory
-os.system(f"rm {cwd}/profile_info/*")
+subprocess.run(["rm", f"{cwd}/profile_info/*"])
