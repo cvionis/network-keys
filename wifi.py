@@ -18,10 +18,11 @@ subprocess.run(["rm", "-f", f"{cwd}/profile_info/*")
 # Get listed user profiles from 'file_split' list and save them to a new list
 profiles = ([(i.split(':'))[1].replace(" ", "") for i in file_split if 'All User Profile' in i])
 
+
+# Add profiles to a dictionary, giving each an incremented key ('c') starting from 1
 p_dict = {}
 c = 1
 
-# Add profiles to a dictionary, giving each an incremented key ('c') starting from 1
 for i in range(len(profiles)):
     p_dict.update({c:profiles[i]})
     c+=1
