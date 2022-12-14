@@ -1,5 +1,5 @@
 # network-keys
-A script that allows the user to choose from a list of Wi-Fi networks they've connected to and print their passwords.<br/><br/>
+A script that allows the user to choose from a list of Wi-Fi networks they've connected to and print their passwords.<br/>
 
 <h2>Compatibility and Limitations</h2>
 
