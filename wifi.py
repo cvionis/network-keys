@@ -9,11 +9,11 @@ cwd = os.getcwd()
 subprocess.run(["netsh", "wlan", "show", "profile", ">", f"{cwd}/profile_info/ssid_profiles.txt"])
 
 # Save each line of file containing profile info to a list
-with open(f"{cwd}/profile_info/ssid_profiles.txt", "r") as f:
+with open(f"{cwd}/profile_info/ssid_profiles.txt", "r+") as f:
     file_split = list((f.read()).split("\n"))
 
 # Delete all files inside profile_info 
-subprocess.run(["rm", "-f", f"{cwd}/profile_info/*")
+subprocess.run(["rm", "-f", f"{cwd}/profile_info/*"])
 
 # Get listed user profiles from 'file_split' list and save them to a new list
 profiles = ([(i.split(':'))[1].replace(" ", "") for i in file_split if 'All User Profile' in i])
