@@ -4,17 +4,16 @@ import subprocess
 
 def main():
     subprocess.run(["clear"])
-    cwd = os.getcwd()
 
     # Redirect output of "netsh wlan show profile" to text file inside project directory
-    subprocess.run(["netsh", "wlan", "show", "profile", ">", f"{cwd}/profile_info/ssid_profiles.txt"])
+    subprocess.run(["netsh", "wlan", "show", "profile", ">", f"ssid_profiles.txt"])
 
-    # Save each line of file containing profile info to a list
-    with open(f"{cwd}/profile_info/ssid_profiles.txt", "r+") as f:
+    # Save each line of the file containing profile info to a list
+    with open(f"ssid_profiles.txt", "a+") as f:
         file_split = list((f.read()).split("\n"))
 
-    # Delete all files inside profile_info 
-    subprocess.run(["rm", "-f", f"{cwd}/profile_info/*"])
+    # Delete text file containing profile information
+    subprocess.run(["rm", "-f", f"ssid_profiles.txt"])
 
     # Get listed user profiles from 'file_split' list and save them to a new list
     profiles = ([(i.split(':'))[1].replace(" ", "") for i in file_split if 'All User Profile' in i])
@@ -42,21 +41,22 @@ def main():
 
     profile_value = p_dict.get(profile_input)
 
-    # Export file containing profile's password to 'profile_info' directory, hide processing info
-    subprocess.run(["netsh", "wlan", "export", "profile", "name={profile_value}", f"folder={cwd}profile_info", "key=clear", "|", "@echo", "off"])
+    # Export file containing profile's password to current working directory, hide processing info
+    cwd = os.getcwd()
+    subprocess.run(["netsh", "wlan", "export", "profile", "name={profile_value}", f"folder={cwd}" "key=clear", "|", "@echo", "off"])
 
-    pw_file_name = (f"Wi-Fi-{profile_value}")
+    pw_file = (f"Wi-Fi-{profile_value}.xml")
 
     # Get <keyMaterial> tag inside exported file, save its contents to variable
-    with open(f"{cwd}\\profile_info\\{pw_file_name}.xml", "r") as f:
+    with open(f"{pw_file}", "r") as f:
         wifi_pw_element = "".join([i for i in list(f.read().split("\n")) if "keyMaterial" in i])
 
     wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
      
     print(f"\n{profile_value}'s password:\n------------\n| {wifi_pw} |\n------------")
 
-    # Delete all files inside 'profile_info' directory
-    subprocess.run(["rm", f"{cwd}/profile_info/*"])
+    # Delete file containing info about selected profile
+    subprocess.run(["rm", "-f", f"pw_file"])
 
 if __name__ == "__main__":
     main()
