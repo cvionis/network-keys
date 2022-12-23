@@ -23,6 +23,7 @@ def main():
     p_dict = {}
     c = 1
 
+    # TODO: consider, for the save of brevity, writing c++ and i++ in the .update() argument expression
     for i in range(len(profiles)):
         p_dict.update({c:profiles[i]})
         c+=1
