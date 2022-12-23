@@ -1,15 +1,17 @@
 import os
+import sys
 import re
+import shlex
 import subprocess
 
 def main():
     subprocess.run(["clear"])
 
     # Redirect output of "netsh wlan show profile" to text file inside project directory
-    subprocess.run(["netsh", "wlan", "show", "profile", ">", f"ssid_profiles.txt"])
+    subprocess.run(["netsh", "wlan", "show" ,"profile", ">", "ssid_profiles.txt"], shell=True)
 
     # Save each line of the file containing profile info to a list
-    with open(f"ssid_profiles.txt", "a+") as f:
+    with open(f"ssid_profiles.txt", "r+") as f:
         file_split = list((f.read()).split("\n"))
 
     # Delete text file containing profile information
@@ -32,23 +34,29 @@ def main():
     [print(f"{i}) {p_dict.get(i)}") for i in (p_dict)]
 
     while True:
-        profile_input = int(input("\n> "))
+        try:
+            profile_input = int(input("\n> "))
+        except ValueError:
+            print("\nError: Enter an integer value")
+            sys.exit(1)
+        except KeyboardInterrupt:
+            print("\n\nExiting script...")
+            sys.exit(1)
      
         if (profile_input in p_dict):
             break
         else:
-            print("Invalid choice -- try again")
+            print("\nInvalid choice: try again")
 
     profile_value = p_dict.get(profile_input)
 
     # Export file containing profile's password to current working directory, hide processing info
-    cwd = os.getcwd()
-    subprocess.run(["netsh", "wlan", "export", "profile", "name={profile_value}", f"folder={cwd}" "key=clear", "|", "@echo", "off"])
+    subprocess.run(["netsh", "wlan", "export", "profile", f"name={profile_value}", "folder=." "key=clear", "|", "@echo", "off"], shell=True)
 
-    pw_file = (f"Wi-Fi-{profile_value}.xml")
+    pw_file = (f"{profile_value}")
 
     # Get <keyMaterial> tag inside exported file, save its contents to variable
-    with open(f"{pw_file}", "r") as f:
+    with open(f"Wi-Fi-{pw_file}.xml", "r") as f:
         wifi_pw_element = "".join([i for i in list(f.read().split("\n")) if "keyMaterial" in i])
 
     wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
