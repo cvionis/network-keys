@@ -51,12 +51,13 @@ def main():
     profile_value = p_dict.get(profile_input)
 
     # Export file containing profile's password to current working directory, hide processing info
-    subprocess.run(["netsh", "wlan", "export", "profile", f"name={profile_value}", "folder=." "key=clear", "|", "@echo", "off"], shell=True)
 
-    pw_file = (f"{profile_value}")
+    subprocess.run(["netsh", "wlan", "export", "profile", f"name={profile_value}", "folder=.", "key=clear", "|", "@echo", "off"], shell=True)
+
+    pw_file = (f"Wi-Fi-{profile_value}.xml")
 
     # Get <keyMaterial> tag inside exported file, save its contents to variable
-    with open(f"Wi-Fi-{pw_file}.xml", "r") as f:
+    with open(pw_file, "r") as f:
         wifi_pw_element = "".join([i for i in list(f.read().split("\n")) if "keyMaterial" in i])
 
     wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
@@ -64,7 +65,7 @@ def main():
     print(f"\n{profile_value}'s password:\n------------\n| {wifi_pw} |\n------------")
 
     # Delete file containing info about selected profile
-    subprocess.run(["rm", "-f", f"pw_file"])
+    subprocess.run(["rm", "-f", f"{pw_file}"])
 
 if __name__ == "__main__":
     main()
