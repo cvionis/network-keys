@@ -4,32 +4,23 @@ import re
 import subprocess
 
 def main():
-    subprocess.run(["clear"])
-
-    # Redirect output of "netsh wlan show profile" to text file inside project directory
+    # Store network profiles inside a local text file
     subprocess.run(["netsh", "wlan", "show" ,"profile", ">", "ssid_profiles.txt"], shell=True)
 
-    # Save each line of the file containing profile info to a list
-    with open(f"ssid_profiles.txt", "r+") as f:
-        file_split = list((f.read()).split("\n"))
+    with open(f"ssid_profiles.txt", "r") as f:
+        #file_split = list((f.read()).split("\n"))
+        lines = f.readlines()
 
-    # Delete text file containing profile information
+    profiles = ([(i.split(':'))[1].replace(" ", "") for line in lines if 'All User Profile' in line])
     subprocess.run(["rm", "-f", f"ssid_profiles.txt"])
 
-    # Get listed user profiles from 'file_split' list and save them to a new list
-    profiles = ([(i.split(':'))[1].replace(" ", "") for i in file_split if 'All User Profile' in i])
-
-    # Add profiles to a dictionary, giving each an incremented label starting from 1
-    p_dict = {}
-
-    # TODO: consider, for the save of brevity, writing c++ and i++ in the .update() argument expression
+    profile_dict = {}
     for i in range(len(profiles)):
-        p_dict.update({i+1:profiles[i]})
+        profile_dict.update({i+1:profiles[i]})
         i+=1
 
-    # Print all profiles, use a loop to check selection input, and save input to 'profile_input'
     print("\nChoose a network:\n")
-    [print(f"{i}) {p_dict.get(i)}") for i in (p_dict)]
+    [print(f"{i}) {profile_dict.get(i)}") for i in (profile_dict)]
 
     while True:
         try:
@@ -40,28 +31,25 @@ def main():
         except KeyboardInterrupt:
             print("\n\nExiting script...")
             sys.exit(1)
-     
-        if (profile_input in p_dict):
+
+        if (profile_input in profile_dict):
             break
         else:
             print("\nInvalid choice: Choose a number from the list")
 
-    profile_value = p_dict.get(profile_input)
+    profile = profile_dict.get(profile_input)
 
     # Export file containing profile's password to current working directory, hide processing info
-    subprocess.run(["netsh", "wlan", "export", "profile", f"name={profile_value}", "folder=.", "key=clear", "|", "@echo", "off"], shell=True)
+    subprocess.run(["netsh", "wlan", "export", "profile", f"name={profile}", "folder=.", "key=clear", "|", "@echo", "off"], shell=True)
 
-    pw_file = (f"Wi-Fi-{profile_value}.xml")
+    pw_file = (f"Wi-Fi-{profile}.xml")
 
-    # Get <keyMaterial> tag inside exported file, save its contents to variable
     with open(pw_file, "r") as f:
         wifi_pw_element = "".join([i for i in list(f.read().split("\n")) if "keyMaterial" in i])
-
     wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
      
-    print(f"\n{profile_value}'s password:\n\n{wifi_pw}")
+    print(f"\n{profile}'s password:\n\n{wifi_pw}")
 
-    # Delete file containing info about selected profile
     subprocess.run(["rm", "-f", f"{pw_file}"])
 
 if __name__ == "__main__":
