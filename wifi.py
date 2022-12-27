@@ -5,13 +5,14 @@ import subprocess
 
 def main():
     # Store network profiles inside a local text file
-    subprocess.run(["netsh", "wlan", "show" ,"profile", ">", "ssid_profiles.txt"], shell=True)
+    subprocess.run(["netsh", "wlan", "show" ,"profile", ">", 
+        "ssid_profiles.txt"], shell=True)
 
     with open(f"ssid_profiles.txt", "r") as f:
-        #file_split = list((f.read()).split("\n"))
         lines = f.readlines()
 
-    profiles = ([(i.split(':'))[1].replace(" ", "") for line in lines if 'All User Profile' in line])
+    profiles = ([(i.split(':'))[1].replace(" ", "") for line in lines 
+        if 'All User Profile' in line])
     subprocess.run(["rm", "-f", f"ssid_profiles.txt"])
 
     profile_dict = {}
@@ -39,14 +40,17 @@ def main():
 
     profile = profile_dict.get(profile_input)
 
-    # Export file containing profile's password to current working directory, hide processing info
-    subprocess.run(["netsh", "wlan", "export", "profile", f"name={profile}", "folder=.", "key=clear", "|", "@echo", "off"], shell=True)
+    # Export file containing profile's password to current working directory
+    subprocess.run(["netsh", "wlan", "export", "profile", f"name={profile}", 
+        "folder=.", "key=clear", "|", "@echo", "off"], shell=True)
 
     pw_file = (f"Wi-Fi-{profile}.xml")
 
     with open(pw_file, "r") as f:
-        wifi_pw_element = "".join([i for i in list(f.read().split("\n")) if "keyMaterial" in i])
-    wifi_pw = ''.join(re.findall(r'[0-9]', wifi_pw_element))
+        lines = f.readlines()
+
+    pw_element = "".join([line for line in lines if "keyMaterial" in line])
+    wifi_pw = ''.join(re.findall(r'[0-9]', pw_element))
      
     print(f"\n{profile}'s password:\n\n{wifi_pw}")
 
